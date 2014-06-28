@@ -46,6 +46,11 @@ public class DownloadManager implements FileDownloaderDelegate {
             downloadList.add( download );
             download.beginDownload();
         }
+
+        //Update the frame list
+        SimpleBOL s = SimpleBOL.getInstance();
+        s.getRepositoryManager().loadAllRepositories();
+        s.getFrame().setupRepositoryList( s.getRepositoryManager().getRepositoryList() );
     }
 
 

@@ -55,6 +55,7 @@ public class RepositoryManager {
     }
 
     public void loadAllRepositories() {
+        repositoryList.clear();
 
         Repository temp;
         for (File file : repositoriesPath.listFiles()) {

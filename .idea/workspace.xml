@@ -7,9 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d932b4d5-8420-40c9-90f8-32c419303df5" name="Default" comment="Repository download from URL&#10;JSON util class&#10;DownloadManager implementation&#10;SimpleBOL auto updater&#10;Few Changes for Download class">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/builds/Bol Studio.exe" afterPath="$PROJECT_DIR$/builds/Bol Studio.exe" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java" afterPath="$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/wesleynascimento/Repository.java" afterPath="$PROJECT_DIR$/src/net/wesleynascimento/Repository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/wesleynascimento/Script.java" afterPath="$PROJECT_DIR$/src/net/wesleynascimento/Script.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java" afterPath="$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java" afterPath="$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SimpleBOL.iws" />
@@ -55,8 +56,8 @@
       <file leaf-file-name="DownloadManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="157" max-vertical-offset="1598">
-              <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="412" max-vertical-offset="1683">
+              <caret line="51" column="55" selection-start-line="51" selection-start-column="55" selection-end-line="51" selection-end-column="55" />
               <folding>
                 <element signature="e#727#728#0" expanded="true" />
                 <element signature="e#758#759#0" expanded="true" />
@@ -65,11 +66,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Repository.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Repository.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Repository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="3145">
-              <caret line="140" column="79" selection-start-line="140" selection-start-column="79" selection-end-line="140" selection-end-column="79" />
+            <state vertical-scroll-proportion="0.7132867" vertical-offset="1989" max-vertical-offset="3264">
+              <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -78,8 +79,8 @@
       <file leaf-file-name="RepositoryManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="1156">
-              <caret line="33" column="32" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="601" max-vertical-offset="1173">
+              <caret line="57" column="31" selection-start-line="57" selection-start-column="31" selection-end-line="57" selection-end-column="31" />
               <folding>
                 <element signature="e#976#977#0" expanded="true" />
                 <element signature="e#1015#1016#0" expanded="true" />
@@ -88,10 +89,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Script.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Script.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Script.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.3897436" vertical-offset="129" max-vertical-offset="714">
+            <state vertical-scroll-proportion="0.0" vertical-offset="129" max-vertical-offset="714">
               <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
               <folding>
                 <element signature="e#553#554#0" expanded="true" />
@@ -104,8 +105,8 @@
       <file leaf-file-name="SBOLFrame.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="2618">
-              <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="2618">
+              <caret line="86" column="51" selection-start-line="86" selection-start-column="51" selection-end-line="86" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -150,14 +151,14 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/src/net/wesleynascimento/Download.java" />
-        <option value="$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java" />
         <option value="$PROJECT_DIR$/src/defaults/bol_repo.json" />
-        <option value="$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java" />
         <option value="$PROJECT_DIR$/src/net/wesleynascimento/JSON.java" />
-        <option value="$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java" />
         <option value="$PROJECT_DIR$/src/net/wesleynascimento/SimpleBOL.java" />
-        <option value="$PROJECT_DIR$/src/net/wesleynascimento/Repository.java" />
         <option value="$PROJECT_DIR$/src/net/wesleynascimento/Script.java" />
+        <option value="$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java" />
+        <option value="$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java" />
+        <option value="$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java" />
+        <option value="$PROJECT_DIR$/src/net/wesleynascimento/Repository.java" />
       </list>
     </option>
   </component>
@@ -467,7 +468,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -480,7 +481,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1808176" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -546,41 +547,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="1156">
-          <caret line="33" column="32" selection-start-line="33" selection-start-column="32" selection-end-line="33" selection-end-column="32" />
-          <folding>
-            <element signature="e#976#977#0" expanded="true" />
-            <element signature="e#1015#1016#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="871" max-vertical-offset="1598">
-          <caret line="46" column="37" selection-start-line="46" selection-start-column="37" selection-end-line="46" selection-end-column="37" />
-          <folding>
-            <element signature="e#727#728#0" expanded="true" />
-            <element signature="e#758#759#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1530" max-vertical-offset="2618">
-          <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/defaults/bol_repo.json">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="560">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="7" selection-end-column="1" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Script.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="129" max-vertical-offset="714">
+          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+          <folding>
+            <element signature="e#553#554#0" expanded="true" />
+            <element signature="e#580#581#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -601,22 +583,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Repository.java">
+    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/DownloadManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1989" max-vertical-offset="3145">
-          <caret line="140" column="79" selection-start-line="140" selection-start-column="79" selection-end-line="140" selection-end-column="79" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="412" max-vertical-offset="1683">
+          <caret line="51" column="55" selection-start-line="51" selection-start-column="55" selection-end-line="51" selection-end-column="55" />
+          <folding>
+            <element signature="e#727#728#0" expanded="true" />
+            <element signature="e#758#759#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/ui/SBOLFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="969" max-vertical-offset="2618">
+          <caret line="86" column="51" selection-start-line="86" selection-start-column="51" selection-end-line="86" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Script.java">
+    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/RepositoryManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3897436" vertical-offset="129" max-vertical-offset="714">
-          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="601" max-vertical-offset="1173">
+          <caret line="57" column="31" selection-start-line="57" selection-start-column="31" selection-end-line="57" selection-end-column="31" />
           <folding>
-            <element signature="e#553#554#0" expanded="true" />
-            <element signature="e#580#581#0" expanded="true" />
+            <element signature="e#976#977#0" expanded="true" />
+            <element signature="e#1015#1016#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/wesleynascimento/Repository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7132867" vertical-offset="1989" max-vertical-offset="3264">
+          <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

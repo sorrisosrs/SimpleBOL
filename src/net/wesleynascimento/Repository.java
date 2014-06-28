@@ -29,13 +29,14 @@ public class Repository {
 
 
     private String update_url;  //Remote url to update
-    private File repositoryPath;//
+    private static final File repositoryPath = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
 
     private List<Script> scripts = new ArrayList<Script>();
 
     private JSONObject json;
 
     private static Logger logger = Logger.getLogger(SimpleBOL.class);
+
 
     public boolean fromURL(String string) {
         try {
@@ -138,12 +139,15 @@ public class Repository {
             this.description = json.getString("description");
             this.update_url = json.getString("update_url");
 
-            this.repositoryPath = new File(file.getParentFile().getParentFile(), this.getName().replaceAll(" ", "_") + "_" + this.getAuthor().replaceAll(" ", "_"));
-
             JSONArray scripts = json.getJSONArray("scripts");
 
+            String thisRepoPath =  repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+
+            File f = new File( thisRepoPath );
+            f.mkdirs();
+
             for (int i = 0; i < scripts.length(); i++) {
-                this.scripts.add(new Script(scripts.get(i).toString(), repositoryPath));
+                this.scripts.add(new Script(scripts.get(i).toString(), f));
             }
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
@@ -158,17 +162,20 @@ public class Repository {
 
         //Make sure that can create it
         this.repositoryPath.mkdirs();
-        String thisRepoPath =  repositoryPath.getAbsolutePath() + "/";
+        String thisRepoPath =  repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+
+        File f = new File( thisRepoPath );
+        f.mkdirs();
 
         DownloadManager downloadManager = DownloadManager.getInstance();
 
         //Create the download for the JSON file
-        Download download = new Download(update_url + "/" + JSONNAME, thisRepoPath + JSONNAME, downloadType);
+        Download download = new Download(update_url + JSONNAME, thisRepoPath + "/" + JSONNAME, downloadType);
         downloadManager.add(download);
 
         //Create an download for each script
         for(Script script : scripts ){
-            download = new Download( update_url + "/" + script.getName(),  thisRepoPath + script.getName(), downloadType);
+            download = new Download( update_url + script.getName(),  thisRepoPath + "/" + script.getName(), downloadType);
             downloadManager.add(download);
         }
     }

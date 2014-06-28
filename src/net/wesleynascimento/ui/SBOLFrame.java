@@ -85,7 +85,7 @@ public class SBOLFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public void setupRepositoryList(List<Repository> repositoryList) {
         //Add each repository in a row of the list!
-
+        repoList.removeAllElements();
         for (Repository r : repositoryList) {
             repoList.addElement(r);
         }
