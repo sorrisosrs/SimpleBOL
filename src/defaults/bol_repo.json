@@ -1,0 +1,7 @@
+{
+    "name" : "SAC Simple Repo",
+    "author" : "wesley",
+    "update_url" : "http://myurl.com/bol_repo.json",
+    "version" : 1.0,
+    "scripts" : [""]
+}
