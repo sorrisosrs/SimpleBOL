@@ -17,8 +17,6 @@ public class Script {
         }
         this.file = new File(path, fileName);
 
-        System.out.println(file.getAbsolutePath() + " - " + fileName);
-
         if (!file.exists()) {
             status = ScriptStatus.MISSING;
         }

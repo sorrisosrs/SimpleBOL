@@ -73,6 +73,7 @@ public class Repository {
             } catch (JSONException e) {
                 error = "Invalid " + JSONNAME + " format!";
                 logger.severe(error);
+                logger.severe( e.getMessage() );
                 return false;
             }
 
@@ -118,6 +119,7 @@ public class Repository {
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
             logger.severe(error);
+            logger.severe( e.getMessage() );
             return false;
         }
     }
@@ -134,9 +136,9 @@ public class Repository {
             this.name = json.getString("name");
             this.version = json.getDouble("version");
             this.description = json.getString("description");
-            this.update_url = json.getString("update_up");
+            this.update_url = json.getString("update_url");
 
-            this.repositoryPath = new File(file.getParentFile(), this.getName() + " - " + this.getAuthor());
+            this.repositoryPath = new File(file.getParentFile().getParentFile(), this.getName().replaceAll(" ", "_") + "_" + this.getAuthor().replaceAll(" ", "_"));
 
             JSONArray scripts = json.getJSONArray("scripts");
 
