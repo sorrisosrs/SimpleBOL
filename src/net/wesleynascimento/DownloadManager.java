@@ -53,6 +53,16 @@ public class DownloadManager implements FileDownloaderDelegate {
         s.getFrame().setupRepositoryList( s.getRepositoryManager().getRepositoryList() );
     }
 
+    public String getStatusBarText(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Donwloading ");
+        sb.append( downloadList.size() );
+        sb.append(" of ");
+        sb.append(downloadList.size() + queueList.size());
+        sb.append(" files.");
+        return sb.toString();
+    }
+
 
     @Override
     public void didStartDownload(FileDownloader fileDownloader) {
