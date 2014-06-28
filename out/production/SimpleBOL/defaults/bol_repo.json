@@ -1,0 +1,8 @@
+{
+    "name" : "Example",
+    "author" : "Wesley",
+    "update_url" : "http://myurl.com/bol_repo.json",
+    "description" : "Simple repository example",
+    "version" : 1.0,
+    "scripts" : [""]
+}
