@@ -28,7 +28,7 @@ public class SimpleBOL {
 
     private boolean debug = false;
     private final double VERSION = 0.001;
-    private final String update = "";
+    private final String update = "https://raw.githubusercontent.com/sorrisosrs/SimpleBOL/master/builds/update.json";
 
     private Configuration configuration;
     private RepositoryManager repositoryManager;
