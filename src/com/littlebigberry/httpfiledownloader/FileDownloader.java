@@ -27,13 +27,22 @@ public class FileDownloader implements DownloadWorkerDelegate {
     /*
      * Constructor
      */
+    public FileDownloader() {
+
+    }
+
     public FileDownloader(FileDownloaderDelegate delegate) {
-        this.delegate = delegate;
+        setDelegate(delegate);
     }
 
     /*
      * Public methods
      */
+
+    public void setDelegate(FileDownloaderDelegate delegate) {
+        this.delegate = delegate;
+    }
+
     public void beginDownload() {
         if (this.isDownloading()) {
             System.out.println("FileDownloader is already downloading a file.");
