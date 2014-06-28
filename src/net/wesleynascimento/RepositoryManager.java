@@ -30,6 +30,10 @@ public class RepositoryManager {
         }
     }
 
+    public File getRepositoriesPath(){
+        return repositoriesPath;
+    }
+
     public Repository getRepositoryByName(String name) {
         for (Repository r : repositoryList) {
             if (r.getName().equals(name)) {

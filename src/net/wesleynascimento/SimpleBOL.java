@@ -8,9 +8,14 @@
 package net.wesleynascimento;
 
 import net.wesleynascimento.ui.SBOLFrame;
+import org.json.JSONException;
+import org.json.JSONObject;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * This class Start the Program, load the config file,
@@ -23,25 +28,18 @@ public class SimpleBOL {
 
     private boolean debug = false;
     private final double VERSION = 0.001;
+    private final String update = "";
 
-    private Parameters parameters;
     private Configuration configuration;
     private RepositoryManager repositoryManager;
     private SBOLFrame frame;
 
+    private static final SimpleBOL instance = new SimpleBOL();
+
     private File currentDirectory;
 
     public static void main(String[] args) {
-        SimpleBOL simpleBOL = new SimpleBOL(args);
-        simpleBOL.start();
-    }
-
-    public SimpleBOL(String[] args) {
-        parameters = new Parameters();
-        parameters.parse(args);
-
-        //Setup parameters
-        setDebug(parameters.get("debug", false));
+        SimpleBOL.getInstance().start();
     }
 
     public void start() {
@@ -64,12 +62,36 @@ public class SimpleBOL {
         }
 
         //Check for updates and download it in background
+        lookForUpdate();
 
         //Look for installed repositories, and load them
         repositoryManager = new RepositoryManager(this);
         repositoryManager.loadAllRepositories();
 
         frame.setupRepositoryList(repositoryManager.getRepositoryList());
+    }
+
+    public void lookForUpdate(){
+
+        //Create a parallel thread to look for updates and download
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    JSONObject jsonUpdate = JSON.getJSON( new URL( update ) );
+
+                    if( jsonUpdate.getDouble("version") > VERSION ){
+                        DownloadManager downloadManager = DownloadManager.getInstance();
+                        Download download = new Download( jsonUpdate.getString("update_url"), SimpleBOL.class.getProtectionDomain().getCodeSource().getLocation().getPath(), DownloadType.UPDATE_SIMPLEBOL);
+                        downloadManager.add( download );
+                    }
+                } catch (IOException e){
+                    //Do nothing!
+                } catch (JSONException e){
+                    //Do nothing too
+                }
+            }
+        }).start();
     }
 
     public void setDebug(boolean debug) {
@@ -86,6 +108,10 @@ public class SimpleBOL {
 
     public File getCurrentDirectory() {
         return currentDirectory;
+    }
+
+    public static SimpleBOL getInstance(){
+        return instance;
     }
 
 }

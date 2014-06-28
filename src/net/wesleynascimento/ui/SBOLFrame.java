@@ -1,5 +1,6 @@
 package net.wesleynascimento.ui;
 
+import net.wesleynascimento.DownloadType;
 import net.wesleynascimento.Repository;
 import net.wesleynascimento.Script;
 import net.wesleynascimento.SimpleBOL;
@@ -118,7 +119,7 @@ public class SBOLFrame extends JFrame implements ActionListener, ListSelectionLi
                         Repository repo = new Repository();
 
                         //If is not a valid repo
-                        if (!repo.getRepository(repoField.getText())) {
+                        if (!repo.fromURL(repoField.getText())) {
                             JOptionPane.showMessageDialog(simpleBOL.getFrame(), repo.getError(), "Error", JOptionPane.ERROR_MESSAGE);
                         }
                         //Is a valid repo, but we Already have
@@ -127,7 +128,7 @@ public class SBOLFrame extends JFrame implements ActionListener, ListSelectionLi
                         }
                         //Have not errors, so lets download and install
                         else {
-
+                            repo.download(DownloadType.INSTALL );
                         }
                     }
 

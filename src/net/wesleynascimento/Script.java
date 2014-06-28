@@ -23,7 +23,7 @@ public class Script {
             status = ScriptStatus.MISSING;
         }
 
-        name = fileName.replaceAll(".lua", "");
+        name = fileName;
     }
 
     public String getName() {

@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * Created by Wesley on 28/06/2014.
  */
-public class Download extends FileDownloader implements FileDownloaderDelegate {
+public class Download extends FileDownloader {
 
     private DownloadType type;
     private DownloadStatus status;
@@ -17,7 +17,6 @@ public class Download extends FileDownloader implements FileDownloaderDelegate {
     private String displayString;
 
     public Download(String url, String file, DownloadType type) {
-        this.setDelegate(this);
         this.setUrl(url);
         this.setLocalLocation(file);
         this.type = type;
@@ -53,30 +52,11 @@ public class Download extends FileDownloader implements FileDownloaderDelegate {
         return status;
     }
 
-    @Override
-    public void didStartDownload(FileDownloader fileDownloader) {
-        this.status = DownloadStatus.DOWNLOADING;
+    public void setDisplayString( String displayString ){
+        this.displayString = displayString;
     }
 
-    @Override
-    public void didProgressDownload(FileDownloader fileDownloader) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getType().getTitle());
-        sb.append(getDisplayName()).append(" (");
-        sb.append(fileDownloader.getPercentComplete()).append(" ");
-        sb.append(fileDownloader.getKbPerSecond()).append(") ");
-        sb.append(getStatus().getName());
-
-        displayString = sb.toString();
-    }
-
-    @Override
-    public void didFinishDownload(FileDownloader fileDownloader) {
-        this.status = DownloadStatus.COMPLETED;
-    }
-
-    @Override
-    public void didFailDownload(FileDownloader fileDownloader) {
-        this.status = DownloadStatus.ERROR;
+    public void setStatus( DownloadStatus status){
+        this.status = status;
     }
 }
