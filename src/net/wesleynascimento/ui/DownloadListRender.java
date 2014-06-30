@@ -10,7 +10,10 @@ import java.awt.*;
  */
 public class DownloadListRender extends DefaultListCellRenderer implements ListCellRenderer<Object> {
 
-    private static final Color selectedBG = new Color(13, 41, 62);
+    private static final Color selectedFG = Color.lightGray;
+    private static final Color selectedBG = new Color(75, 110, 175);
+
+    private static final Color unselectedFG = new Color(71, 150, 81);
     private static final Color unselectedBG = new Color(43, 43, 43);
 
     @Override
@@ -21,12 +24,13 @@ public class DownloadListRender extends DefaultListCellRenderer implements ListC
         this.setFont(list.getFont());
 
         setText(download.getDisplayString());
-        this.setForeground(download.getStatus().getColor());
 
         if (isSelected) {
             setBackground(selectedBG);
+            setForeground(selectedFG);
         } else {
             setBackground(unselectedBG);
+            setForeground(unselectedFG);
         }
         return this;
     }

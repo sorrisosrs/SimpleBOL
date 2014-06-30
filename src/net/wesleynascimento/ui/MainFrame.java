@@ -14,9 +14,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This is the main frame of the program,
+ * Here you can clone, see and manager Repositories and Scripts
+ *
+ * You can use some shorcut to do somethings:
+ * Ctrol + D to show Download frame
+ * Ctrol + B to build a simplobolscript
+ *
  * Created by Wesley on 26/06/2014.
  */
 public class MainFrame extends JFrame implements ActionListener, ListSelectionListener, KeyListener {
@@ -30,11 +38,13 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     private SimpleBOL simpleBOL;
 
-    //Gui Components
     private TextBox repoField;
     private Button button;
     private DefaultListModel repoList = new DefaultListModel();
     private DefaultListModel scriptList = new DefaultListModel();
+    private JLabel name, author, version, description, url;
+    //Create a key pressedList
+    private List<Integer> pressedList = new ArrayList<Integer>();
 
     public MainFrame(SimpleBOL simpleBOL) {
         this.simpleBOL = simpleBOL;
@@ -44,19 +54,25 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         initComponents();
         this.setSize(WIDTH, HEIGHT);
         this.setLocationRelativeTo(null);
+        this.addKeyListener(this);
         getContentPane().setBackground(backgroundColor);
     }
 
+    /**
+     * Setup all components and add into frame
+     */
     public void initComponents() {
-        //Setup default font
+        //Default font
         Font font = new Font("Segoe UI", Font.PLAIN, 12);
 
+        //Repository URL text field
         repoField = new TextBox(this, "Put the repository URL here!");
         repoField.setBounds(5, 5, WIDTH - 100 - 20, 20);
         repoField.setFont(font);
         repoField.addKeyListener(this);
         repoField.setVisible(true);
 
+        //Clone button
         button = new Button("Clone");
         button.setBounds(WIDTH - 100 - 10, 5, 100, 20);
         button.setEnabled(false);
@@ -65,6 +81,20 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         button.addActionListener(this);
         button.setVisible(true);
 
+        //Repo list pop menu
+        PopupMenu popList1 = new PopupMenu();
+        popList1.setFont(font);
+        JMenuItem item;
+        item = new JMenuItem("Activate");
+        popList1.add(item);
+        item = new JMenuItem("Desativate");
+        popList1.add(item);
+        item = new JMenuItem("Delete");
+        popList1.add(item);
+        item = new JMenuItem("Force-update");
+        popList1.add(item);
+
+        //Repository list
         JList list1 = new JList();
         list1.setBounds(5, 30, WIDTH / 2 - 5, HEIGHT - 60 - 60);
         list1.setFont(font);
@@ -72,8 +102,20 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         list1.setBackground(backgroundHightlight);
         list1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list1.setModel(repoList);
+        list1.setComponentPopupMenu(popList1);
         list1.addListSelectionListener(this);
 
+        //Script list pop menu
+        PopupMenu popList2 = new PopupMenu();
+        popList2.setFont(font);
+        item = new JMenuItem("Activate");
+        popList2.add(item);
+        item = new JMenuItem("Desativate");
+        popList2.add(item);
+        item = new JMenuItem("Check");
+        popList2.add(item);
+
+        //Script List
         JList list2 = new JList();
         list2.setBounds(WIDTH / 2 + 10, 30, WIDTH / 2 - 20, HEIGHT - 60 - 60);
         list2.setFont(font);
@@ -81,8 +123,38 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         list2.setCellRenderer(new ScriptListRender());
         list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list2.setModel(scriptList);
+        list2.setComponentPopupMenu(popList2);
         list2.addListSelectionListener(this);
 
+        //Create information components
+        name = new JLabel("Name:");
+        name.setFont(font);
+        name.setBounds(5, HEIGHT - 120 + 35, HEIGHT / 3, 20);
+        name.setVisible(true);
+
+        author = new JLabel("Author:");
+        author.setFont(font);
+        author.setBounds(5 + HEIGHT / 3, HEIGHT - 120 + 35, HEIGHT / 3, 20);
+        author.setVisible(true);
+
+        version = new JLabel("Version:");
+        version.setFont(font);
+        version.setBounds(5 + (HEIGHT / 3 * 2), HEIGHT - 120 + 35, HEIGHT / 3, 20);
+        version.setVisible(true);
+
+        description = new JLabel("Description:");
+        description.setFont(font);
+        description.setBounds(5, HEIGHT - 120 + 35 + 25, HEIGHT / 3, 20);
+        description.setVisible(true);
+
+        url = new JLabel("URL:");
+        url.setFont(font);
+        url.setBounds(5, HEIGHT - 120 + 35 + 50, HEIGHT / 3, 20);
+        url.setVisible(true);
+
+        //End information components
+
+        //Bottom status bar
         StatusBar statusBar = new StatusBar();
         statusBar.addFirstPanel(DownloadManager.getInstance().getStatusBarLabel());
         statusBar.addSecondPanel(simpleBOL.getScriptBuilder().getStatusBarLabel());
@@ -91,12 +163,18 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         statusBar.setFont(font);
         statusBar.setVisible(true);
 
+        //Add all created Component into frame
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
         contentPane.add(repoField);
         contentPane.add(button);
         contentPane.add(list1);
         contentPane.add(list2);
+        contentPane.add(name);
+        contentPane.add(author);
+        contentPane.add(version);
+        contentPane.add(description);
+        contentPane.add(url);
         contentPane.add(statusBar);
     }
 
@@ -120,7 +198,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     }
 
     public void loadRepositoryInfos(Repository repository) {
-        //Put informations about the repository
+        name.setText("Name: " + repository.getName());
+        author.setText("Author: " + repository.getAuthor());
+        version.setText("Version: " + repository.getVersion());
+        description.setText("Description: " + repository.getDescription());
+        url.setText("URL: " + repository.getUpdate_url());
     }
 
     public void cloneRepository() {
@@ -159,7 +241,6 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
         //On repoList select
         if (list.getModel() == repoList) {
-
             if (!list.isSelectionEmpty()) {
 
                 // Find out which index is selected.
@@ -176,19 +257,37 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         }
     }
 
+    public boolean isPressed(int keycode) {
+        return pressedList.contains(keycode);
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
-        //keyChange(e);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        //keyChange(e);
+
+        if (!pressedList.contains(e.getKeyCode())) {
+            pressedList.add(e.getKeyCode());
+        }
+        //Check shortCuts
+        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_D)) {
+            DownloadManager.getInstance().getFrame().setVisible(true);
+        }
+
+        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_B)) {
+            //Build
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         keyChange(e);
+
+        if (pressedList.contains(e.getKeyCode())) {
+            pressedList.remove(e.getKeyCode());
+        }
     }
 
     public void keyChange(KeyEvent e) {

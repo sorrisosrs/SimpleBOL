@@ -182,6 +182,10 @@ public class Repository {
         return update_url;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public File getRepositoryPath() {
         return repositoryPath;
     }

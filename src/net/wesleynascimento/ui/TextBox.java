@@ -15,7 +15,7 @@ public class TextBox extends JTextField implements FocusListener {
     protected final JLabel placeholderLabel;
     private final Color backgroundColor = new Color(43, 43, 43);
     private final Color borderColor = new Color(49, 51, 53);
-    private final Color borderColorFocus = new Color(13, 41, 62);
+    private final Color borderColorFocus = new Color(75, 110, 175);
 
     public TextBox(JFrame parent, String placeholder) {
         super();

@@ -38,7 +38,7 @@ public class DownloadFrame extends JFrame implements Runnable {
         Font font = new Font("Segoe UI", Font.PLAIN, 12);
 
         list = new JList();
-        list.setBounds(5, 5, getWidth() - 15, getHeight() - 30);
+        list.setBounds(5, 5, getWidth() - 15, getHeight() - 40);
         list.setFont(font);
         list.setCellRenderer(new DownloadListRender());
         list.setBackground(backgroundHightlight);

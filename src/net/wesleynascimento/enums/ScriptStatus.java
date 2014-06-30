@@ -7,8 +7,8 @@ import java.awt.*;
  */
 public enum ScriptStatus {
     OK(new Color(71, 150, 81)),
-    BROKEN(Color.RED),
-    DESACTIVE(Color.YELLOW),
+    BROKEN(new Color(255, 100, 100)),
+    DESACTIVE(new Color(203, 119, 48)),
     MISSING(Color.LIGHT_GRAY);
 
     private Color color;
