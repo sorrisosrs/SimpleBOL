@@ -10,32 +10,25 @@ import java.awt.*;
  */
 public class RepositoryListRender extends DefaultListCellRenderer {
 
-    private static final Color selectedBG = new Color(20, 20, 20);
-    private static final Color selectedFG = Color.WHITE;
+    private static final Color selectedBG = new Color(13, 41, 62);
+    private static final Color foregroundColor = new Color(71, 150, 81);
 
-    private static final Color unselectedBG = Color.BLACK;
-    private static final Color unselectedFG = Color.WHITE;
+    private static final Color unselectedBG = new Color(43, 43, 43);
 
-    public RepositoryListRender() {
-        this.setBorder(null);
-    }
 
     @Override
     public Component getListCellRendererComponent(JList list,
                                                   Object value, int index, boolean isSelected,
                                                   boolean cellHasFocus) {
-        super.getListCellRendererComponent(list, value, index,
-                isSelected, cellHasFocus);
-
         Repository repository = (Repository) value;
+        this.setFont(list.getFont());
 
         setText(repository.getName());
+        this.setForeground(foregroundColor);
 
         if (isSelected) {
-            setForeground(selectedFG);
             setBackground(selectedBG);
         } else {
-            setForeground(unselectedFG);
             setBackground(unselectedBG);
         }
         return this;

@@ -7,10 +7,10 @@
 
 package net.wesleynascimento;
 
-import net.wesleynascimento.ui.SBOLFrame;
+import net.wesleynascimento.enums.DownloadType;
+import net.wesleynascimento.ui.MainFrame;
 import org.json.JSONException;
 import org.json.JSONObject;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 import javax.swing.*;
 import java.io.File;
@@ -26,28 +26,31 @@ import java.net.URL;
  */
 public class SimpleBOL {
 
-    private boolean debug = false;
+    private static final SimpleBOL instance = new SimpleBOL();
     private final double VERSION = 0.001;
     private final String update = "https://raw.githubusercontent.com/sorrisosrs/SimpleBOL/master/builds/update.json";
-
+    private boolean debug = false;
     private Configuration configuration;
     private RepositoryManager repositoryManager;
-    private SBOLFrame frame;
-
-    private static final SimpleBOL instance = new SimpleBOL();
-
+    private ScriptBuilder scriptBuilder;
+    private MainFrame frame;
     private File currentDirectory;
 
     public static void main(String[] args) {
         SimpleBOL.getInstance().start();
     }
 
+    public static SimpleBOL getInstance() {
+        return instance;
+    }
+
     public void start() {
         //Load the config file
         configuration = new Configuration();
+        scriptBuilder = new ScriptBuilder(this);
 
         //Create the frame
-        frame = new SBOLFrame(this);
+        frame = new MainFrame(this);
         frame.setVisible(true);
 
         //Check if is a valid bol directory
@@ -71,23 +74,23 @@ public class SimpleBOL {
         frame.setupRepositoryList(repositoryManager.getRepositoryList());
     }
 
-    public void lookForUpdate(){
+    public void lookForUpdate() {
 
         //Create a parallel thread to look for updates and download
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    JSONObject jsonUpdate = JSON.getJSON( new URL( update ) );
+                try {
+                    JSONObject jsonUpdate = JSON.getJSON(new URL(update));
 
-                    if( jsonUpdate.getDouble("version") > VERSION ){
+                    if (jsonUpdate.getDouble("version") > VERSION) {
                         DownloadManager downloadManager = DownloadManager.getInstance();
-                        Download download = new Download( jsonUpdate.getString("update_url"), SimpleBOL.class.getProtectionDomain().getCodeSource().getLocation().getPath(), DownloadType.UPDATE_SIMPLEBOL);
-                        downloadManager.add( download );
+                        Download download = new Download(jsonUpdate.getString("update_url"), SimpleBOL.class.getProtectionDomain().getCodeSource().getLocation().getPath(), DownloadType.UPDATE_SIMPLEBOL);
+                        downloadManager.add(download);
                     }
-                } catch (IOException e){
+                } catch (IOException e) {
                     //Do nothing!
-                } catch (JSONException e){
+                } catch (JSONException e) {
                     //Do nothing too
                 }
             }
@@ -98,7 +101,7 @@ public class SimpleBOL {
         this.debug = debug;
     }
 
-    public SBOLFrame getFrame() {
+    public MainFrame getFrame() {
         return frame;
     }
 
@@ -110,8 +113,15 @@ public class SimpleBOL {
         return currentDirectory;
     }
 
-    public static SimpleBOL getInstance(){
-        return instance;
+    public double getVERSION() {
+        return VERSION;
     }
 
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public ScriptBuilder getScriptBuilder() {
+        return scriptBuilder;
+    }
 }

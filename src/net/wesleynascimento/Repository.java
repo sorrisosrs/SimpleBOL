@@ -1,15 +1,13 @@
 package net.wesleynascimento;
 
 import com.sun.istack.internal.logging.Logger;
+import net.wesleynascimento.enums.DownloadType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,70 +17,49 @@ import java.util.List;
  */
 public class Repository {
 
+    private static final File repositoryPath = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
+    private static Logger logger = Logger.getLogger(SimpleBOL.class);
     private final String JSONNAME = "bol_repo.json";
     private String error = "No one!";
-
     private String author;      //Author's name
     private String name;        //Repository name
     private String description; //Description
     private double version;     //Repository version
-
-
     private String update_url;  //Remote url to update
-    private static final File repositoryPath = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
-
     private List<Script> scripts = new ArrayList<Script>();
-
     private JSONObject json;
 
-    private static Logger logger = Logger.getLogger(SimpleBOL.class);
-
-
     public boolean fromURL(String string) {
-        try {
-            if( !string.endsWith(JSONNAME) ){
-                if( !string.endsWith("/") ){
-                    string = string.concat("/");
-                }
-                string = string.concat( JSONNAME );
+        if (!string.endsWith(JSONNAME)) {
+            if (!string.endsWith("/")) {
+                string = string.concat("/");
             }
+            string = string.concat(JSONNAME);
+        }
 
-            URL url = new URL(string);
-
-            //Check if this url exists
-            HttpURLConnection huc =  (HttpURLConnection)  url.openConnection();
-            huc.setRequestMethod("GET");
-            //setup a fake user agent
-            huc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)");
-            huc.connect();
-
-            if( huc.getResponseCode() == 404 ){
-                error = "Cannot find repository from URL.";
-                logger.severe(error);
-                return false;
-            }
-
-            File file = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
-
-            //Read the file from url
-            try{
-                return parseJSON( JSON.getJSON( url ), file );
-            } catch (IOException e) {
-                error = "IO problem!";
-                logger.severe(error);
-                return false;
-            } catch (JSONException e) {
-                error = "Invalid " + JSONNAME + " format!";
-                logger.severe(error);
-                logger.severe( e.getMessage() );
-                return false;
-            }
-
-        } catch (IOException e){
-            error = "This file does not exists!";
+        if (!string.startsWith("http://") && !string.startsWith("https://") && !string.startsWith("ftp://")) {
+            error = "Invalid repository URL!";
             logger.severe(error);
+            logger.severe(string);
             return false;
         }
+        File file = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
+
+        //Read the file from url
+        try {
+            URL url = new URL(string);
+            return parseJSON(JSON.getJSON(url), file);
+        } catch (IOException e) {
+            error = "This repository can't be fount!";
+            logger.severe(error);
+            return false;
+        } catch (JSONException e) {
+            error = "Invalid " + JSONNAME + " format!";
+            logger.severe(error);
+            logger.severe(e.getMessage());
+            return false;
+        }
+
     }
 
     public boolean fromFile(String string) {
@@ -111,8 +88,8 @@ public class Repository {
         }
 
         //Read the file, and load the repo
-        try{
-            return parseJSON( JSON.getJSON(file), file );
+        try {
+            return parseJSON(JSON.getJSON(file), file);
         } catch (IOException e) {
             error = "IO problem!";
             logger.severe(error);
@@ -120,12 +97,12 @@ public class Repository {
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
             logger.severe(error);
-            logger.severe( e.getMessage() );
+            logger.severe(e.getMessage());
             return false;
         }
     }
 
-    public boolean parseJSON( JSONObject json, File file){
+    public boolean parseJSON(JSONObject json, File file) {
         try {
             if (json.getString("name") == null || json.getString("author") == null || json.getDouble("version") == 0.0 || json.getString("description") == null) {
                 error = "This file is not a valid " + JSONNAME;
@@ -133,6 +110,7 @@ public class Repository {
                 return false;
             }
 
+            this.json = json;
             this.author = json.getString("author");
             this.name = json.getString("name");
             this.version = json.getDouble("version");
@@ -141,9 +119,9 @@ public class Repository {
 
             JSONArray scripts = json.getJSONArray("scripts");
 
-            String thisRepoPath =  repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+            String thisRepoPath = repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
 
-            File f = new File( thisRepoPath );
+            File f = new File(thisRepoPath);
             f.mkdirs();
 
             for (int i = 0; i < scripts.length(); i++) {
@@ -152,19 +130,19 @@ public class Repository {
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
             logger.severe(error);
-            logger.severe( e.getMessage() );
+            logger.severe(e.getMessage());
             return false;
         }
         return true;
     }
 
-    public void download(DownloadType downloadType){
+    public void download(DownloadType downloadType) {
 
         //Make sure that can create it
         this.repositoryPath.mkdirs();
-        String thisRepoPath =  repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+        String thisRepoPath = repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
 
-        File f = new File( thisRepoPath );
+        File f = new File(thisRepoPath);
         f.mkdirs();
 
         DownloadManager downloadManager = DownloadManager.getInstance();
@@ -174,8 +152,8 @@ public class Repository {
         downloadManager.add(download);
 
         //Create an download for each script
-        for(Script script : scripts ){
-            download = new Download( update_url + script.getName(),  thisRepoPath + "/" + script.getName(), downloadType);
+        for (Script script : scripts) {
+            download = new Download(update_url + script.getName(), thisRepoPath + "/" + script.getName(), downloadType);
             downloadManager.add(download);
         }
     }

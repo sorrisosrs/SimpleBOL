@@ -30,7 +30,7 @@ public class RepositoryManager {
         }
     }
 
-    public File getRepositoriesPath(){
+    public File getRepositoriesPath() {
         return repositoriesPath;
     }
 

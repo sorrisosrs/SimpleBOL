@@ -1,10 +1,10 @@
-package net.wesleynascimento;
+package net.wesleynascimento.enums;
 
 /**
- * Created by Wesley on 28/06/2014.
+ * Created by Wesley on 29/06/2014.
  */
 public enum DownloadType {
-    UPDATE("[UPDATE]"), INSTALL("[INSTALL]"), UPDATE_SIMPLEBOL("[UPDATE]");
+    UPDATE("[UPDATE]"), CLONE("[CLONE]"), UPDATE_SIMPLEBOL("[UPDATE]");
 
     private String title;
 

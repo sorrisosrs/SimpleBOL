@@ -2,8 +2,12 @@ package net.wesleynascimento;
 
 import com.littlebigberry.httpfiledownloader.FileDownloader;
 import com.littlebigberry.httpfiledownloader.FileDownloaderDelegate;
+import net.wesleynascimento.enums.DownloadStatus;
+import net.wesleynascimento.ui.DownloadFrame;
 
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +16,39 @@ import java.util.List;
  */
 public class DownloadManager implements FileDownloaderDelegate {
 
-
+    private static final DownloadManager instance = new DownloadManager();
     private List<Download> downloadList = new ArrayList<Download>();
     private List<Download> queueList = new ArrayList<Download>();
-
-    private static final DownloadManager instance = new DownloadManager();
-    private JFrame frame;
+    private DownloadFrame frame;
+    private JLabel statusBarLabel;
 
     public DownloadManager(){
-        //Cria o frame, e qualquer outra confg necessaria
+        frame = new DownloadFrame();
+
+        statusBarLabel = new JLabel();
+        statusBarLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                frame.setVisible(true);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        updateLabel();
     }
 
     public static DownloadManager getInstance(){
@@ -30,7 +58,7 @@ public class DownloadManager implements FileDownloaderDelegate {
     public void add(Download download) {
         if( downloadList.size() < 5 && !downloadList.contains( download )){
             downloadList.add(download);
-            download.setDelegate( this );
+            download.setDelegate(this);
             download.beginDownload();
         }
 
@@ -38,6 +66,8 @@ public class DownloadManager implements FileDownloaderDelegate {
             queueList.add(download);
             download.setDelegate(this);
         }
+        updateLabel();
+        frame.addToList(download);
     }
 
     private void next(){
@@ -50,44 +80,45 @@ public class DownloadManager implements FileDownloaderDelegate {
         //Update the frame list
         SimpleBOL s = SimpleBOL.getInstance();
         s.getRepositoryManager().loadAllRepositories();
-        s.getFrame().setupRepositoryList( s.getRepositoryManager().getRepositoryList() );
+        s.getFrame().setupRepositoryList(s.getRepositoryManager().getRepositoryList());
+
+        updateLabel();
     }
 
-    public String getStatusBarText(){
+    private void updateLabel() {
         StringBuilder sb = new StringBuilder();
         sb.append("Donwloading ");
         sb.append( downloadList.size() );
         sb.append(" of ");
         sb.append(downloadList.size() + queueList.size());
-        sb.append(" files.");
-        return sb.toString();
+        sb.append(" files in queue.");
+
+        statusBarLabel.setText(sb.toString());
     }
 
+    public JLabel getStatusBarLabel() {
+        return statusBarLabel;
+    }
 
     @Override
     public void didStartDownload(FileDownloader fileDownloader) {
         Download download = (Download) fileDownloader;
         download.setStatus( DownloadStatus.DOWNLOADING );
+        download.setDisplayString();
+        updateLabel();
     }
 
     @Override
     public void didProgressDownload(FileDownloader fileDownloader) {
         Download download = (Download) fileDownloader;
-
-        StringBuilder sb = new StringBuilder();
-        sb.append( download.getType().getTitle());
-        sb.append( download.getDisplayName()).append(" (");
-        sb.append( download.getPercentComplete()).append(" ");
-        sb.append( download.getKbPerSecond()).append(") ");
-        sb.append( download.getStatus().getName());
-
-        download.setDisplayString(sb.toString());
+        download.setDisplayString();
     }
 
     @Override
     public void didFinishDownload(FileDownloader fileDownloader) {
         Download download = (Download) fileDownloader;
         download.setStatus( DownloadStatus.COMPLETED );
+        download.setDisplayString();
 
         if( downloadList.contains( download) ) {
             downloadList.remove(download);
@@ -99,10 +130,15 @@ public class DownloadManager implements FileDownloaderDelegate {
     public void didFailDownload(FileDownloader fileDownloader) {
         Download download = (Download) fileDownloader;
         download.setStatus( DownloadStatus.ERROR );
+        download.setDisplayString();
 
         if( downloadList.contains( download) ) {
             downloadList.remove(download);
             next();
         }
+    }
+
+    public DownloadFrame getFrame() {
+        return frame;
     }
 }

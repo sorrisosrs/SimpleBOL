@@ -1,12 +1,12 @@
-package net.wesleynascimento;
+package net.wesleynascimento.enums;
 
 import java.awt.*;
 
 /**
- * Created by Wesley on 28/06/2014.
+ * Created by Wesley on 29/06/2014.
  */
 public enum DownloadStatus {
-    COMPLETED(Color.GREEN, "Completed"),
+    COMPLETED(new Color(71, 150, 81), "Completed"),
     ERROR(Color.RED, "Error"),
     DOWNLOADING(Color.YELLOW, "Downloading"),
     WAITING(Color.LIGHT_GRAY, "Waiting");
@@ -16,6 +16,7 @@ public enum DownloadStatus {
 
     private DownloadStatus(Color color, String name) {
         this.color = color;
+        this.name = name;
     }
 
     public String getName() {

@@ -1,5 +1,7 @@
 package net.wesleynascimento;
 
+import net.wesleynascimento.enums.ScriptStatus;
+
 import java.io.File;
 
 /**

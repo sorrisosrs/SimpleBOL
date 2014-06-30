@@ -1,4 +1,4 @@
-package net.wesleynascimento;
+package net.wesleynascimento.enums;
 
 import java.awt.*;
 
@@ -6,7 +6,7 @@ import java.awt.*;
  * Created by Wesley on 28/06/2014.
  */
 public enum ScriptStatus {
-    OK(Color.GREEN),
+    OK(new Color(71, 150, 81)),
     BROKEN(Color.RED),
     DESACTIVE(Color.YELLOW),
     MISSING(Color.LIGHT_GRAY);

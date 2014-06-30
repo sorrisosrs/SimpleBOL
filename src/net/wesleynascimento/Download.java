@@ -1,7 +1,8 @@
 package net.wesleynascimento;
 
 import com.littlebigberry.httpfiledownloader.FileDownloader;
-import com.littlebigberry.httpfiledownloader.FileDownloaderDelegate;
+import net.wesleynascimento.enums.DownloadStatus;
+import net.wesleynascimento.enums.DownloadType;
 
 import java.io.File;
 
@@ -24,24 +25,29 @@ public class Download extends FileDownloader {
         this.status = DownloadStatus.WAITING;
 
         this.setDisplayName(new File(file).getName()); //Get file name
-
-        //Setup list display string
-        StringBuilder sb = new StringBuilder();
-        sb.append(getType().getTitle());
-        sb.append(getDisplayName()).append(" (");
-        sb.append("0%").append(" ");
-        sb.append("0 kb/s").append(") ");
-        sb.append(getStatus().getName());
-
-        this.displayString = sb.toString();
+        setDisplayString();
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
+    public void setDisplayString() {
+        //Setup list display string
+        StringBuilder sb = new StringBuilder();
+        sb.append(getType().getTitle()).append(" ");
+        sb.append(getDisplayName()).append(" - ");
+        sb.append(getStatus().getName());
+
+        if (getStatus() == DownloadStatus.DOWNLOADING) {
+            sb.append(" ( ").append(getPercentComplete()).append(" ) ");
+            sb.append(getKbPerSecond()).append(" kB/s");
+        }
+        this.displayString = sb.toString();
     }
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public DownloadType getType() {
@@ -52,11 +58,11 @@ public class Download extends FileDownloader {
         return status;
     }
 
-    public void setDisplayString( String displayString ){
-        this.displayString = displayString;
+    public void setStatus(DownloadStatus status) {
+        this.status = status;
     }
 
-    public void setStatus( DownloadStatus status){
-        this.status = status;
+    public String getDisplayString() {
+        return displayString;
     }
 }
