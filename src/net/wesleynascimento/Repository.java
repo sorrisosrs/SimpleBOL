@@ -2,6 +2,7 @@ package net.wesleynascimento;
 
 import com.sun.istack.internal.logging.Logger;
 import net.wesleynascimento.enums.DownloadType;
+import net.wesleynascimento.enums.RepositoryStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ public class Repository {
     private String update_url;  //Remote url to update
     private List<Script> scripts = new ArrayList<Script>();
     private JSONObject json;
+    private RepositoryStatus status = RepositoryStatus.OK;
 
     public boolean fromURL(String string) {
         if (!string.endsWith(JSONNAME)) {
@@ -127,6 +129,8 @@ public class Repository {
             for (int i = 0; i < scripts.length(); i++) {
                 this.scripts.add(new Script(scripts.get(i).toString(), f));
             }
+
+            setupConfig();
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
             logger.severe(error);
@@ -156,6 +160,35 @@ public class Repository {
             download = new Download(update_url + script.getName(), thisRepoPath + "/" + script.getName(), downloadType);
             downloadManager.add(download);
         }
+    }
+
+    public void setEnable(boolean active){
+        if( active ){
+            this.status = RepositoryStatus.OK;
+        } else {
+            this.status = RepositoryStatus.DISABLE;
+        }
+        setupConfig();
+    }
+
+    public void remove(){
+
+    }
+
+    public void setupConfig(){
+        Configuration configuration = SimpleBOL.getInstance().getConfiguration();
+        Object re =configuration.getRepositoryConfig( this );
+
+        //There is nothing for this repositori
+        if( re == null){
+            return;
+        }
+
+        //Eu ia fazer algo bem loko aqui, mas esqueci...
+        //JSon
+
+        //Be carefull with this call, hard to understand
+        SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
     }
 
     public List<Script> getScripts() {

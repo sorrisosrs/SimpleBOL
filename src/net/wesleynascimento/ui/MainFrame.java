@@ -42,7 +42,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     private Button button;
     private DefaultListModel repoList = new DefaultListModel();
     private DefaultListModel scriptList = new DefaultListModel();
+    private JList list1, list2;
     private JLabel name, author, version, description, url;
+
     //Create a key pressedList
     private List<Integer> pressedList = new ArrayList<Integer>();
 
@@ -85,17 +87,25 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         PopupMenu popList1 = new PopupMenu();
         popList1.setFont(font);
         JMenuItem item;
-        item = new JMenuItem("Activate");
+        item = new JMenuItem("Enable");
+        item.setActionCommand("enable_repository");
+        item.addActionListener( this );
         popList1.add(item);
-        item = new JMenuItem("Desativate");
+        item = new JMenuItem("Disable");
+        item.setActionCommand("disable_repository");
+        item.addActionListener( this );
         popList1.add(item);
-        item = new JMenuItem("Delete");
+        item = new JMenuItem("Remove");
+        item.setActionCommand("remove_repository");
+        item.addActionListener( this );
         popList1.add(item);
-        item = new JMenuItem("Force-update");
+        item = new JMenuItem("Clone");
+        item.setActionCommand("clone_repository");
+        item.addActionListener( this );
         popList1.add(item);
 
         //Repository list
-        JList list1 = new JList();
+        list1 = new JList();
         list1.setBounds(5, 30, WIDTH / 2 - 5, HEIGHT - 60 - 60);
         list1.setFont(font);
         list1.setCellRenderer(new RepositoryListRender());
@@ -108,15 +118,21 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         //Script list pop menu
         PopupMenu popList2 = new PopupMenu();
         popList2.setFont(font);
-        item = new JMenuItem("Activate");
+        item = new JMenuItem("Enable");
+        item.setActionCommand("enable_script");
+        item.addActionListener( this );
         popList2.add(item);
-        item = new JMenuItem("Desativate");
+        item = new JMenuItem("Disable");
+        item.setActionCommand("disable_script");
+        item.addActionListener( this );
         popList2.add(item);
         item = new JMenuItem("Check");
+        item.setActionCommand("check_script");
+        item.addActionListener( this );
         popList2.add(item);
 
         //Script List
-        JList list2 = new JList();
+        list2 = new JList();
         list2.setBounds(WIDTH / 2 + 10, 30, WIDTH / 2 - 20, HEIGHT - 60 - 60);
         list2.setFont(font);
         list2.setBackground(backgroundHightlight);
@@ -132,22 +148,22 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         name.setBounds(5, HEIGHT - 120 + 35, HEIGHT / 3, 20);
         name.setVisible(true);
 
-        author = new JLabel("Author:");
+        author = new JLabel("Author: ");
         author.setFont(font);
         author.setBounds(5 + HEIGHT / 3, HEIGHT - 120 + 35, HEIGHT / 3, 20);
         author.setVisible(true);
 
-        version = new JLabel("Version:");
+        version = new JLabel("Version: ");
         version.setFont(font);
         version.setBounds(5 + (HEIGHT / 3 * 2), HEIGHT - 120 + 35, HEIGHT / 3, 20);
         version.setVisible(true);
 
-        description = new JLabel("Description:");
+        description = new JLabel("Description: ");
         description.setFont(font);
         description.setBounds(5, HEIGHT - 120 + 35 + 25, HEIGHT / 3, 20);
         description.setVisible(true);
 
-        url = new JLabel("URL:");
+        url = new JLabel("URL: ");
         url.setFont(font);
         url.setBounds(5, HEIGHT - 120 + 35 + 50, HEIGHT / 3, 20);
         url.setVisible(true);
@@ -232,22 +248,54 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
         if (action.equals(button.getActionCommand())) {
             cloneRepository();
+            return;
         }
+
+        //Repository Actions
+        if( action.contains("repository") ){
+            //Get the selected repository
+            if( list1.isSelectionEmpty() ){
+                JOptionPane.showMessageDialog(this, "There is no repository to do it.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Repository repository = (Repository) list1.getSelectedValue();
+
+            //Clone re-download the repository!
+            if( action.equals("clone_repository") ){
+                repository.download( DownloadType.CLONE );
+            }
+
+            //Set repository as Enable
+            else if( action.equals("enable_repository") ){
+                repository.setEnable( true );
+            }
+
+            //Set repository as Disable
+            else if( action.equals("disanable_repository") ){
+                repository.setEnable( false );
+            }
+
+            else if( action.equals("remove_repository") ){
+                repository.remove();
+            }
+        }
+
+        //Scripts Actions
     }
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        JList list = (JList) e.getSource();
 
         //On repoList select
-        if (list.getModel() == repoList) {
-            if (!list.isSelectionEmpty()) {
+        if (list1.getModel() == repoList) {
+            if (!list1.isSelectionEmpty()) {
 
                 // Find out which index is selected.
-                int minIndex = list.getMinSelectionIndex();
-                int maxIndex = list.getMaxSelectionIndex();
+                int minIndex = list1.getMinSelectionIndex();
+                int maxIndex = list1.getMaxSelectionIndex();
                 for (int i = minIndex; i <= maxIndex; i++) {
-                    if (list.isSelectedIndex(i)) {
+                    if (list1.isSelectedIndex(i)) {
                         Repository r = (Repository) repoList.get(i);
                         setupScriptList(r);
                         loadRepositoryInfos(r);
@@ -271,12 +319,16 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         if (!pressedList.contains(e.getKeyCode())) {
             pressedList.add(e.getKeyCode());
         }
+
         //Check shortCuts
         if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_D)) {
-            DownloadManager.getInstance().getFrame().setVisible(true);
+            Frame frame = DownloadManager.getInstance().getFrame();
+
+            if( !frame.isVisible() )
+                frame.setVisible(true);
         }
 
-        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_B)) {
+        else if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_B)) {
             //Build
         }
     }

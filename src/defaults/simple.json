@@ -1,0 +1,9 @@
+{
+    "last_build" : 00000,
+    "repositories" : {
+        "Example" :{
+            "status" : true,
+            "disable_scripts" : []
+        }
+    }
+}
