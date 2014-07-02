@@ -18,4 +18,16 @@ public enum RepositoryStatus {
     public Color getColor() {
         return color;
     }
+
+    public static RepositoryStatus get(String s){
+        if( s.equals( "OK" )){
+            return RepositoryStatus.OK;
+        }
+
+        else if( s.equals("DISABLE") ){
+            return RepositoryStatus.DISABLE;
+        }
+
+        return null;
+    }
 }

@@ -15,24 +15,30 @@ public class Configuration {
     private static final String configFile = "simple.json";
     private SimpleBOL simpleBOL;
     private JSONObject config;
+    private File file;
 
     public Configuration(SimpleBOL simpleBOL){
         this.simpleBOL = simpleBOL;
+        file = new File(simpleBOL.getCurrentDirectory(), configFile);
         loadConfigJSON();
+    }
+
+    public void savaConfigJSON(){
+        try {
+            JSON.createJSONFile( config, file);
+        } catch (IOException e){
+            JOptionPane.showMessageDialog(simpleBOL.getFrame(), "Can't save the configuration file.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void loadConfigJSON(){
         try {
-
-            File jsonFile = new File(simpleBOL.getCurrentDirectory(), configFile);
-
-            if (!jsonFile.exists()) {
-                jsonFile.mkdirs();
-                jsonFile.createNewFile();
+            if ( !file.exists() ) {
+                JSON.createJSONFile( new JSONObject("{}"), file);
             }
-            config = JSON.getJSON( jsonFile );
+            config = JSON.getJSON( file );
         } catch (IOException e){
-            JOptionPane.showMessageDialog(simpleBOL.getFrame(), "Unable to create a new config file", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(simpleBOL.getFrame(), "Can't create a configuration file.", "Error", JOptionPane.ERROR_MESSAGE);
             config = new JSONObject("{}");
             return;
         }

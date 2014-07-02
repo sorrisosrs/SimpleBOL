@@ -26,6 +26,10 @@ public class Script {
         name = fileName;
     }
 
+    public void setStatus( ScriptStatus status ){
+        this.status = status;
+    }
+
     public String getName() {
         return name;
     }

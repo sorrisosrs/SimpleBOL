@@ -46,7 +46,7 @@ public class SimpleBOL {
 
     public void start() {
         //Load the config file
-        configuration = new Configuration();
+        configuration = new Configuration(this);
         scriptBuilder = new ScriptBuilder(this);
 
         //Create the frame

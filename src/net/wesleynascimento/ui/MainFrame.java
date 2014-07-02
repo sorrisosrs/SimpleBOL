@@ -255,7 +255,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         if( action.contains("repository") ){
             //Get the selected repository
             if( list1.isSelectionEmpty() ){
-                JOptionPane.showMessageDialog(this, "There is no repository to do it.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Do you need to select any Repository!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

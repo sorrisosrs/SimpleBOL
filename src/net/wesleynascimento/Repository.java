@@ -3,6 +3,7 @@ package net.wesleynascimento;
 import com.sun.istack.internal.logging.Logger;
 import net.wesleynascimento.enums.DownloadType;
 import net.wesleynascimento.enums.RepositoryStatus;
+import net.wesleynascimento.enums.ScriptStatus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -130,7 +131,7 @@ public class Repository {
                 this.scripts.add(new Script(scripts.get(i).toString(), f));
             }
 
-            setupConfig();
+            loadConfig();
         } catch (JSONException e) {
             error = "Invalid " + JSONNAME + " format!";
             logger.severe(error);
@@ -168,26 +169,65 @@ public class Repository {
         } else {
             this.status = RepositoryStatus.DISABLE;
         }
-        setupConfig();
+        saveConfig();
     }
 
     public void remove(){
 
     }
 
-    public void setupConfig(){
+    public void saveConfig(){
         Configuration configuration = SimpleBOL.getInstance().getConfiguration();
-        Object re =configuration.getRepositoryConfig( this );
+        JSONObject re = configuration.getRepositoryConfig( this );
 
-        //There is nothing for this repositori
+        //There is nothing for this repository, set defaults
         if( re == null){
             return;
         }
 
-        //Eu ia fazer algo bem loko aqui, mas esqueci...
-        //JSon
+        re.put("status", status);
+        JSONArray array = new JSONArray();
 
-        //Be carefull with this call, hard to understand
+        for(Script script : scripts){
+            if( script.getStatus() == ScriptStatus.DESACTIVE ){
+                array.put( script.getName() );
+            }
+        }
+        re.put("disabled_scripts", array);
+
+        //write
+        configuration.savaConfigJSON();
+    }
+
+    public void loadConfig(){
+        Configuration configuration = SimpleBOL.getInstance().getConfiguration();
+        JSONObject re = configuration.getRepositoryConfig( this );
+
+        //There is nothing for this repository, set defaults
+        if( re == null){
+            return;
+        }
+
+        //Setup status
+        boolean status = re.getBoolean("status");
+        if( status ){
+            this.status = RepositoryStatus.OK;
+        } else {
+            this.status = RepositoryStatus.DISABLE;
+        }
+
+        //Setup scripts status
+        JSONArray disabled_scripts = re.getJSONArray("disabled_scripts");
+
+        for(Script script : scripts){
+            for( int i = 0; i < disabled_scripts.length(); i++){
+                if( script.getName().equals( disabled_scripts.getString(i) ) ){
+                    script.setStatus(ScriptStatus.DESACTIVE );
+                }
+            }
+        }
+
+        //Be carefull with this call
         SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
     }
 

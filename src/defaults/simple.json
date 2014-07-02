@@ -3,7 +3,7 @@
     "repositories" : {
         "Example" :{
             "status" : true,
-            "disable_scripts" : []
+            "disabled_scripts" : ["script.lua"]
         }
     }
 }

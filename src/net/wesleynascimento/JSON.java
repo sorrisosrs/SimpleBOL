@@ -53,4 +53,15 @@ public class JSON {
         }
         return new JSONObject( sb.toString() );
     }
+
+    public static void createJSONFile(JSONObject json, File file) throws IOException {
+        if( !file.exists() ){
+            file.createNewFile();
+        }
+
+        BufferedWriter writer = new BufferedWriter( new FileWriter(file));
+        writer.append( json.toString() );
+        writer.flush();
+        writer.close();
+    }
 }
