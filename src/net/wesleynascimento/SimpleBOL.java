@@ -27,8 +27,8 @@ import java.net.URL;
 public class SimpleBOL {
 
     private static final SimpleBOL instance = new SimpleBOL();
-    private final double VERSION = 0.0113;
-    private final String update = "https://raw.githubusercontent.com/sorrisosrs/SimpleBOL/master/builds/update.json";
+    private final double VERSION = 0.536;
+    private final String update = "https://dl.dropboxusercontent.com/u/109527059/SimpleBOL/update.json";
     private boolean debug = false;
     private Configuration configuration;
     private RepositoryManager repositoryManager;
@@ -60,6 +60,7 @@ public class SimpleBOL {
         //Verify the files on directory, if is not the bol directory
         //Request to download the last version of bol
         if (!bol_studio.exists()) {
+            System.out.println(bol_studio.getAbsolutePath());
             JOptionPane.showMessageDialog(frame, "Can't find 'Bol Studio.exe' in this directory.\nMake sure that SimpleBOL is in the same path and your BOL is updated.", "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }

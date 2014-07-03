@@ -47,7 +47,6 @@ public class Repository {
             logger.severe(string);
             return false;
         }
-        File file = SimpleBOL.getInstance().getRepositoryManager().getRepositoriesPath();
 
         //Read the file from url
         try {
@@ -63,7 +62,6 @@ public class Repository {
             logger.severe(e.getMessage());
             return false;
         }
-
     }
 
     public boolean fromFile(String string) {
@@ -164,18 +162,18 @@ public class Repository {
         }
     }
 
-    public void setEnable(boolean enable){
-        if( enable ){
+    public boolean getEnable() {
+        return status.getBoolean();
+    }
+
+    public void setEnable(boolean enable) {
+        if (enable) {
             this.status = RepositoryStatus.ENABLE;
         } else {
             this.status = RepositoryStatus.DISABLE;
         }
-        SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
+        SimpleBOL.getInstance().getFrame().setupRepositoryList(SimpleBOL.getInstance().getRepositoryManager().getRepositoryList());
         saveConfig();
-    }
-
-    public boolean getEnable(){
-        return status.getBoolean();
     }
 
     public RepositoryStatus getStatus(){
@@ -183,15 +181,34 @@ public class Repository {
     }
 
     public void remove(){
-        String thisRepoPath = repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+        String thisRepoPath = repositoryPath.getAbsolutePath() + "/" + getName() + "_" + getAuthor();
 
         File f = new File(thisRepoPath);
 
-        if( f.exists() && f.delete() ){
+        if (!f.exists()) {
+            JOptionPane.showMessageDialog(SimpleBOL.getInstance().getFrame(), "This repository can't be found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        removeFiles(f);
+
+        if (!f.exists()) {
             //Bad call again, I know! :0
+            SimpleBOL.getInstance().getRepositoryManager().loadAllRepositories();
             SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
         } else {
             JOptionPane.showMessageDialog( SimpleBOL.getInstance().getFrame(), "Can't remove this repository now :(", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void removeFiles(File file) {
+        if (file.isDirectory()) {
+            for (File subFile : file.listFiles()) {
+                removeFiles(subFile);
+            }
+            file.delete();
+        } else {
+            file.delete();
         }
     }
 

@@ -15,18 +15,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This is the main frame of the program,
  * Here you can clone, see and manager Repositories and Scripts
- *
- * You can use some shorcut to do somethings:
- * Ctrol + D to show Download frame
- * Ctrol + B to build a simplobolscript
- *
+ * <p/>
  * Created by Wesley on 26/06/2014.
  */
 public class MainFrame extends JFrame implements ActionListener, ListSelectionListener, KeyListener {
@@ -93,19 +88,19 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         JMenuItem item;
         item = new JMenuItem("Enable");
         item.setActionCommand("enable_repository");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList1.add(item);
         item = new JMenuItem("Disable");
         item.setActionCommand("disable_repository");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList1.add(item);
         item = new JMenuItem("Remove");
         item.setActionCommand("remove_repository");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList1.add(item);
         item = new JMenuItem("Clone");
         item.setActionCommand("clone_repository");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList1.add(item);
 
         //Repository list
@@ -124,15 +119,15 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         popList2.setFont(font);
         item = new JMenuItem("Enable");
         item.setActionCommand("enable_script");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList2.add(item);
         item = new JMenuItem("Disable");
         item.setActionCommand("disable_script");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList2.add(item);
         item = new JMenuItem("Check");
         item.setActionCommand("check_script");
-        item.addActionListener( this );
+        item.addActionListener(this);
         popList2.add(item);
 
         //Script List
@@ -211,7 +206,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     public void setupScriptList() {
 
-        if( selectedRepository == null ) return;
+        if (selectedRepository == null) return;
 
         //Add each script of this repository in the list
         scriptList.removeAllElements();
@@ -222,7 +217,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     }
 
     public void loadRepositoryInfos() {
-        if( selectedRepository == null ) return;
+        if (selectedRepository == null) return;
 
         name.setText("Name: " + selectedRepository.getName());
         author.setText("Author: " + selectedRepository.getAuthor());
@@ -262,9 +257,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         }
 
         //Repository Actions
-        if( action.contains("_repository") ){
+        if (action.contains("_repository")) {
             //Get the selected repository
-            if( list1.isSelectionEmpty() ){
+            if (list1.isSelectionEmpty()) {
                 JOptionPane.showMessageDialog(this, "Do you need to select any Repository to perform this action!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -272,48 +267,42 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             Repository repository = (Repository) list1.getSelectedValue();
 
             //Clone re-download the repository!
-            if( action.equals("clone_repository") ){
-                repository.download( DownloadType.CLONE );
+            if (action.equals("clone_repository")) {
+                repository.download(DownloadType.CLONE);
             }
 
             //Set repository as Enable
-            else if( action.equals("enable_repository") ){
-                repository.setEnable( true );
+            else if (action.equals("enable_repository")) {
+                repository.setEnable(true);
             }
 
             //Set repository as Disable
-            else if( action.equals("disable_repository") ){
-                repository.setEnable( false );
-            }
-
-            else if( action.equals("remove_repository") ){
+            else if (action.equals("disable_repository")) {
+                repository.setEnable(false);
+            } else if (action.equals("remove_repository")) {
                 repository.remove();
-                if( repository.equals( selectedRepository )){
+                if (repository.equals(selectedRepository)) {
                     selectedRepository = null;
                 }
             }
         }
 
         //Scripts Actions
-        if( action.contains("_script") ) {
+        if (action.contains("_script")) {
             //Get selected script
-            if( list2.isSelectionEmpty() ){
+            if (list2.isSelectionEmpty()) {
                 JOptionPane.showMessageDialog(this, "Do you need to select any Script to perform this action!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             Script script = (Script) list2.getSelectedValue();
 
-            if( action.equals("check_script") ){
+            if (action.equals("check_script")) {
                 script.checkFileState();
-            }
-
-            else if( action.equals("enable_script") ){
-                script.setStatus( ScriptStatus.ENABLE );
-            }
-
-            else if( action.equals("disable_script") ){
-                script.setStatus( ScriptStatus.DISABLE );
+            } else if (action.equals("enable_script")) {
+                script.setStatus(ScriptStatus.ENABLE);
+            } else if (action.equals("disable_script")) {
+                script.setStatus(ScriptStatus.DISABLE);
             }
         }
     }
@@ -322,7 +311,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     public void valueChanged(ListSelectionEvent e) {
 
         //On repoList select
-        if (list1.equals( (JList)e.getSource()) ) {
+        if (list1.equals((JList) e.getSource())) {
             if (!list1.isSelectionEmpty()) {
 
                 // Find out which index is selected.
@@ -339,46 +328,17 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         }
     }
 
-    public boolean isPressed(int keycode) {
-        return pressedList.contains(keycode);
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
-        if (!pressedList.contains(e.getKeyCode())) {
-            pressedList.add(e.getKeyCode());
-        }
-
-        //Check shortcuts
-        if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_D)) {
-            Frame frame = DownloadManager.getInstance().getFrame();
-
-            if( !frame.isVisible() )
-                frame.setVisible(true);
-        }
-
-        else if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_B)) {
-            //Build
-            try {
-                simpleBOL.getScriptBuilder().build();
-            } catch (IOException io){
-                io.printStackTrace();
-            }
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         keyChange(e);
-
-        if (pressedList.contains(e.getKeyCode())) {
-            pressedList.remove(e.getKeyCode());
-        }
     }
 
     public void keyChange(KeyEvent e) {

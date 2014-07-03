@@ -86,7 +86,7 @@ public class ScriptBuilder {
             if (repository.getEnable()) {
                 for (Script script : repository.getScripts()) {
                     if (script.getStatus().equals(ScriptStatus.ENABLE) && move(script)) {
-                        builder.append("\t\trequire '").append(script.getName()).append("'\n");
+                        builder.append("\t\trequire('").append(script.getName().replaceAll(".lua", "")).append("')\n");
                     }
                 }
             }
@@ -155,10 +155,9 @@ public class ScriptBuilder {
 
         sb.append("--[[\n"); //Start a lua commentary
 
-        sb.append("\t\t\tThis Script is part of SimpleBOL\n");
+        sb.append("\t\t\tThis Script was auto create in {date} by SimpleBOL\n");
         sb.append("\t\t\tSimpleBol can be found here: https://github.com/sorrisosrs/SimpleBOL\n");
         sb.append("\n");
-        sb.append("\t\t\tThis script was created in {date}\n");
         sb.append("\t\t\tVersion: {version}\n");
 
         //ends commentary
