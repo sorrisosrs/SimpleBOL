@@ -30,7 +30,7 @@ public class DownloadListRender extends DefaultListCellRenderer implements ListC
             setForeground(selectedFG);
         } else {
             setBackground(unselectedBG);
-            setForeground(unselectedFG);
+            setForeground( download.getStatus().getColor() );
         }
         return this;
     }

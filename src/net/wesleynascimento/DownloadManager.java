@@ -8,6 +8,8 @@ import net.wesleynascimento.ui.DownloadFrame;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +73,7 @@ public class DownloadManager implements FileDownloaderDelegate {
     }
 
     private void next(){
-        if( queueList.size() > 0){
+        if( queueList.size() > 0 && downloadList.size() < 5){
             Download download = queueList.get(0);
             downloadList.add( download );
             download.beginDownload();
@@ -129,7 +131,7 @@ public class DownloadManager implements FileDownloaderDelegate {
     @Override
     public void didFailDownload(FileDownloader fileDownloader) {
         Download download = (Download) fileDownloader;
-        download.setStatus( DownloadStatus.ERROR );
+        download.setStatus( DownloadStatus.FAIL );
         download.setDisplayString();
 
         if( downloadList.contains( download) ) {

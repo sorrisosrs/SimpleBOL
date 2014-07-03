@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public enum DownloadStatus {
     COMPLETED(new Color(71, 150, 81), "Completed"),
-    ERROR(Color.RED, "Error"),
+    FAIL(Color.RED, "Failled"),
     DOWNLOADING(Color.YELLOW, "Downloading"),
     WAITING(Color.LIGHT_GRAY, "Waiting");
 

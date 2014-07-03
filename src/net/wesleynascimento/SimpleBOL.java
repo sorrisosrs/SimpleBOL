@@ -27,7 +27,7 @@ import java.net.URL;
 public class SimpleBOL {
 
     private static final SimpleBOL instance = new SimpleBOL();
-    private final double VERSION = 0.001;
+    private final double VERSION = 0.0113;
     private final String update = "https://raw.githubusercontent.com/sorrisosrs/SimpleBOL/master/builds/update.json";
     private boolean debug = false;
     private Configuration configuration;

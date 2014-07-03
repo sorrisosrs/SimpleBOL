@@ -5,6 +5,7 @@ import net.wesleynascimento.Repository;
 import net.wesleynascimento.Script;
 import net.wesleynascimento.SimpleBOL;
 import net.wesleynascimento.enums.DownloadType;
+import net.wesleynascimento.enums.ScriptStatus;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -14,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,8 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
     //Create a key pressedList
     private List<Integer> pressedList = new ArrayList<Integer>();
+
+    private Repository selectedRepository;
 
     public MainFrame(SimpleBOL simpleBOL) {
         this.simpleBOL = simpleBOL;
@@ -195,6 +199,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
     }
 
     public void setupRepositoryList(List<Repository> repositoryList) {
+
         //Add each repository in a row of the list!
         repoList.removeAllElements();
         scriptList.removeAllElements();
@@ -204,21 +209,26 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         }
     }
 
-    public void setupScriptList(Repository repository) {
+    public void setupScriptList() {
+
+        if( selectedRepository == null ) return;
+
         //Add each script of this repository in the list
         scriptList.removeAllElements();
 
-        for (Script s : repository.getScripts()) {
+        for (Script s : selectedRepository.getScripts()) {
             scriptList.addElement(s);
         }
     }
 
-    public void loadRepositoryInfos(Repository repository) {
-        name.setText("Name: " + repository.getName());
-        author.setText("Author: " + repository.getAuthor());
-        version.setText("Version: " + repository.getVersion());
-        description.setText("Description: " + repository.getDescription());
-        url.setText("URL: " + repository.getUpdate_url());
+    public void loadRepositoryInfos() {
+        if( selectedRepository == null ) return;
+
+        name.setText("Name: " + selectedRepository.getName());
+        author.setText("Author: " + selectedRepository.getAuthor());
+        version.setText("Version: " + selectedRepository.getVersion());
+        description.setText("Description: " + selectedRepository.getDescription());
+        url.setText("URL: " + selectedRepository.getUpdate_url());
     }
 
     public void cloneRepository() {
@@ -252,10 +262,10 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
         }
 
         //Repository Actions
-        if( action.contains("repository") ){
+        if( action.contains("_repository") ){
             //Get the selected repository
             if( list1.isSelectionEmpty() ){
-                JOptionPane.showMessageDialog(this, "Do you need to select any Repository!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Do you need to select any Repository to perform this action!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -272,23 +282,47 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             }
 
             //Set repository as Disable
-            else if( action.equals("disanable_repository") ){
+            else if( action.equals("disable_repository") ){
                 repository.setEnable( false );
             }
 
             else if( action.equals("remove_repository") ){
                 repository.remove();
+                if( repository.equals( selectedRepository )){
+                    selectedRepository = null;
+                }
             }
         }
 
         //Scripts Actions
+        if( action.contains("_script") ) {
+            //Get selected script
+            if( list2.isSelectionEmpty() ){
+                JOptionPane.showMessageDialog(this, "Do you need to select any Script to perform this action!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Script script = (Script) list2.getSelectedValue();
+
+            if( action.equals("check_script") ){
+                script.checkFileState();
+            }
+
+            else if( action.equals("enable_script") ){
+                script.setStatus( ScriptStatus.ENABLE );
+            }
+
+            else if( action.equals("disable_script") ){
+                script.setStatus( ScriptStatus.DISABLE );
+            }
+        }
     }
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
 
         //On repoList select
-        if (list1.getModel() == repoList) {
+        if (list1.equals( (JList)e.getSource()) ) {
             if (!list1.isSelectionEmpty()) {
 
                 // Find out which index is selected.
@@ -296,9 +330,9 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
                 int maxIndex = list1.getMaxSelectionIndex();
                 for (int i = minIndex; i <= maxIndex; i++) {
                     if (list1.isSelectedIndex(i)) {
-                        Repository r = (Repository) repoList.get(i);
-                        setupScriptList(r);
-                        loadRepositoryInfos(r);
+                        selectedRepository = (Repository) repoList.get(i);
+                        setupScriptList();
+                        loadRepositoryInfos();
                     }
                 }
             }
@@ -320,7 +354,7 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
             pressedList.add(e.getKeyCode());
         }
 
-        //Check shortCuts
+        //Check shortcuts
         if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_D)) {
             Frame frame = DownloadManager.getInstance().getFrame();
 
@@ -330,6 +364,11 @@ public class MainFrame extends JFrame implements ActionListener, ListSelectionLi
 
         else if (isPressed(KeyEvent.VK_CONTROL) && isPressed(KeyEvent.VK_B)) {
             //Build
+            try {
+                simpleBOL.getScriptBuilder().build();
+            } catch (IOException io){
+                io.printStackTrace();
+            }
         }
     }
 

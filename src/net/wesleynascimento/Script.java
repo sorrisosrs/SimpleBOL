@@ -10,10 +10,11 @@ import java.io.File;
 public class Script {
 
     private File file;
-    private ScriptStatus status = ScriptStatus.OK;
+    private ScriptStatus status = ScriptStatus.ENABLE;
     private String name;
+    private Repository repository;
 
-    public Script(String fileName, File path) {
+    public Script(String fileName, File path, Repository repository) {
         if (!fileName.endsWith(".lua")) {
             fileName = fileName + ".lua";
         }
@@ -23,11 +24,21 @@ public class Script {
             status = ScriptStatus.MISSING;
         }
 
+        this.repository = repository;
         name = fileName;
+    }
+
+    public File getFile(){
+        return file;
     }
 
     public void setStatus( ScriptStatus status ){
         this.status = status;
+        SimpleBOL.getInstance().getFrame().setupScriptList();
+        if (!file.exists()) {
+            this.status = ScriptStatus.MISSING;
+        }
+        repository.saveConfig();
     }
 
     public String getName() {

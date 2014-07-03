@@ -64,7 +64,10 @@ public class Configuration {
         }
     }
 
-    public void setRepositoryConfig(JSONObject json){
-        getConfig().put("repositories", json);
+    public void setRepositoryConfig(String repo_key, JSONObject json){
+        if( !getConfig().has("repositories") ) {
+            getConfig().put("repositories", new JSONObject("{}"));
+        }
+        getConfig().getJSONObject("repositories").put(repo_key, json);
     }
 }

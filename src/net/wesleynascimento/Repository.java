@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +31,7 @@ public class Repository {
     private String update_url;  //Remote url to update
     private List<Script> scripts = new ArrayList<Script>();
     private JSONObject json;
-    private RepositoryStatus status = RepositoryStatus.OK;
+    private RepositoryStatus status = RepositoryStatus.ENABLE;
 
     public boolean fromURL(String string) {
         if (!string.endsWith(JSONNAME)) {
@@ -51,7 +52,7 @@ public class Repository {
         //Read the file from url
         try {
             URL url = new URL(string);
-            return parseJSON(JSON.getJSON(url), file);
+            return parseJSON(JSON.getJSON(url));
         } catch (IOException e) {
             error = "This repository can't be fount!";
             logger.severe(error);
@@ -92,7 +93,7 @@ public class Repository {
 
         //Read the file, and load the repo
         try {
-            return parseJSON(JSON.getJSON(file), file);
+            return parseJSON(JSON.getJSON(file));
         } catch (IOException e) {
             error = "IO problem!";
             logger.severe(error);
@@ -105,7 +106,7 @@ public class Repository {
         }
     }
 
-    public boolean parseJSON(JSONObject json, File file) {
+    public boolean parseJSON(JSONObject json) {
         try {
             if (json.getString("name") == null || json.getString("author") == null || json.getDouble("version") == 0.0 || json.getString("description") == null) {
                 error = "This file is not a valid " + JSONNAME;
@@ -128,7 +129,7 @@ public class Repository {
             f.mkdirs();
 
             for (int i = 0; i < scripts.length(); i++) {
-                this.scripts.add(new Script(scripts.get(i).toString(), f));
+                this.scripts.add(new Script(scripts.get(i).toString(), f, this));
             }
 
             loadConfig();
@@ -163,38 +164,53 @@ public class Repository {
         }
     }
 
-    public void setEnable(boolean active){
-        if( active ){
-            this.status = RepositoryStatus.OK;
+    public void setEnable(boolean enable){
+        if( enable ){
+            this.status = RepositoryStatus.ENABLE;
         } else {
             this.status = RepositoryStatus.DISABLE;
         }
+        SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
         saveConfig();
     }
 
-    public void remove(){
+    public boolean getEnable(){
+        return status.getBoolean();
+    }
 
+    public RepositoryStatus getStatus(){
+        return status;
+    }
+
+    public void remove(){
+        String thisRepoPath = repositoryPath.getAbsolutePath() + "/" + getName().replaceAll(" ", "_") + "_" + getAuthor().replaceAll(" ", "_");
+
+        File f = new File(thisRepoPath);
+
+        if( f.exists() && f.delete() ){
+            //Bad call again, I know! :0
+            SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
+        } else {
+            JOptionPane.showMessageDialog( SimpleBOL.getInstance().getFrame(), "Can't remove this repository now :(", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void saveConfig(){
-        Configuration configuration = SimpleBOL.getInstance().getConfiguration();
-        JSONObject re = configuration.getRepositoryConfig( this );
+        JSONObject myconfig = new JSONObject();
+        myconfig.put("enable", status.getBoolean());
 
-        //There is nothing for this repository, set defaults
-        if( re == null){
-            return;
-        }
-
-        re.put("status", status);
         JSONArray array = new JSONArray();
 
         for(Script script : scripts){
-            if( script.getStatus() == ScriptStatus.DESACTIVE ){
+            if( script.getStatus() == ScriptStatus.DISABLE ){
                 array.put( script.getName() );
             }
         }
-        re.put("disabled_scripts", array);
+        myconfig.put("disabled_scripts", array);
 
+        Configuration configuration = SimpleBOL.getInstance().getConfiguration();
+
+        configuration.setRepositoryConfig( this.getName(), myconfig );
         //write
         configuration.savaConfigJSON();
     }
@@ -209,12 +225,7 @@ public class Repository {
         }
 
         //Setup status
-        boolean status = re.getBoolean("status");
-        if( status ){
-            this.status = RepositoryStatus.OK;
-        } else {
-            this.status = RepositoryStatus.DISABLE;
-        }
+        setEnable( re.getBoolean("enable"));
 
         //Setup scripts status
         JSONArray disabled_scripts = re.getJSONArray("disabled_scripts");
@@ -222,13 +233,23 @@ public class Repository {
         for(Script script : scripts){
             for( int i = 0; i < disabled_scripts.length(); i++){
                 if( script.getName().equals( disabled_scripts.getString(i) ) ){
-                    script.setStatus(ScriptStatus.DESACTIVE );
+                    script.setStatus(ScriptStatus.DISABLE );
                 }
             }
         }
 
         //Be carefull with this call
         SimpleBOL.getInstance().getFrame().setupRepositoryList( SimpleBOL.getInstance().getRepositoryManager().getRepositoryList() );
+    }
+
+    public Script getScriptByName(String name){
+        for(Script script : scripts){
+            if( script.getName().equals( name )){
+                return script;
+            }
+        }
+
+        return null;
     }
 
     public List<Script> getScripts() {

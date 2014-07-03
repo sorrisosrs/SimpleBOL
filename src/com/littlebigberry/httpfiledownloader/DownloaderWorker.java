@@ -30,14 +30,16 @@ public class DownloaderWorker extends Thread {
 
             this.beginDownload();
         } catch (Exception e) {
-            e.printStackTrace();
+            this.delegate.didFailDownload( this );
+            //e.printStackTrace();
         } finally {
             try {
                 this.inputStream.close();
                 this.delegate.didFinishDownload(this);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                //e.printStackTrace();
+                this.delegate.didFailDownload( this );
             }
         }
     }

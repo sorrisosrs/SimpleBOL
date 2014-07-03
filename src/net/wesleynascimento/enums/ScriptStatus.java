@@ -6,9 +6,9 @@ import java.awt.*;
  * Created by Wesley on 28/06/2014.
  */
 public enum ScriptStatus {
-    OK(new Color(71, 150, 81)),
+    ENABLE(new Color(71, 150, 81)),
     BROKEN(new Color(255, 100, 100)),
-    DESACTIVE(new Color(203, 119, 48)),
+    DISABLE(new Color(203, 119, 48)),
     MISSING(Color.LIGHT_GRAY);
 
     private Color color;

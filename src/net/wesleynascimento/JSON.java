@@ -54,6 +54,13 @@ public class JSON {
         return new JSONObject( sb.toString() );
     }
 
+    /**
+     * Save a JSON as file!
+     *
+     * @param json JSONObject
+     * @param file File
+     * @throws IOException
+     */
     public static void createJSONFile(JSONObject json, File file) throws IOException {
         if( !file.exists() ){
             file.createNewFile();

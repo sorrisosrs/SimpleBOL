@@ -6,28 +6,22 @@ import java.awt.*;
  * Created by Administrador on 30/06/2014.
  */
 public enum RepositoryStatus {
-    OK(new Color(71, 150, 81)),
-    DISABLE(new Color(203, 119, 48));
+    ENABLE(new Color(71, 150, 81), true),
+    DISABLE(new Color(203, 119, 48), false);
 
     private Color color;
+    private boolean status;
 
-    private RepositoryStatus(Color color) {
+    private RepositoryStatus(Color color, boolean status) {
         this.color = color;
+        this.status = status;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public static RepositoryStatus get(String s){
-        if( s.equals( "OK" )){
-            return RepositoryStatus.OK;
-        }
-
-        else if( s.equals("DISABLE") ){
-            return RepositoryStatus.DISABLE;
-        }
-
-        return null;
+    public boolean getBoolean(){
+        return status;
     }
 }

@@ -10,10 +10,7 @@ import java.awt.*;
  */
 public class RepositoryListRender extends DefaultListCellRenderer {
 
-    private static final Color selectedFG = Color.lightGray;
-    private static final Color selectedBG = new Color(75, 110, 175);
-
-    private static final Color unselectedFG = new Color(71, 150, 81);
+    private static final Color selectedBG = new Color(20, 20, 20);
     private static final Color unselectedBG = new Color(43, 43, 43);
 
 
@@ -25,13 +22,12 @@ public class RepositoryListRender extends DefaultListCellRenderer {
         this.setFont(list.getFont());
 
         setText(repository.getName());
+        setForeground( repository.getStatus().getColor() );
 
         if (isSelected) {
             setBackground(selectedBG);
-            setForeground(selectedFG);
         } else {
             setBackground(unselectedBG);
-            setForeground(unselectedFG);
         }
         return this;
     }
